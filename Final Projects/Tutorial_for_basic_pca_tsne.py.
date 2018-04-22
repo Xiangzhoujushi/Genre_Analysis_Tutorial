@@ -1,0 +1,45 @@
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors
+import pandas as pd
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+
+# Generate random samples based on 4-dimensional gaussian distribution
+
+
+# generate 100 random data points with label 0 in 4-D, for N(2,4), label them as 0
+data_points_label_0 = 2*np.random.randn(100,10)+2
+# generate 100 random data points with label 1 in 4-D for N(4,9)
+data_points_label_1 = 3*np.random.randn(100,10)+4
+# generate 100 random data points with label 1 in 4-D for N(6,16)
+data_points_label_2 = 4*np.random.randn(100,10)+6
+
+
+
+# combine them and together into one data set by appending the second data set by the end to the first one
+data_points = np.concatenate((data_points_label_0, data_points_label_1),axis=0)
+data_points = np.concatenate((data_points_label_2, data_points),axis=0)
+
+# set up the color and labels for visualization
+color = ['red','green','blue']
+label = [0,1,2]
+
+
+
+
+#project data points onto 2-dimension space using PCA
+data_PCA = PCA(n_components=2).fit_transform(data_points)
+#project data points onto 2-dimension space using TSNE
+data_TSNE = TSNE(n_components=2).fit_transform(data_points)
+
+
+#then plotting the data points comparting PCA adn TSNE
+fig,ax = plt.subplots(2,1,figsize=(10,8))
+for i in range(len(label)):
+    ax[0].scatter(data_PCA[i*100:(i+1)*100,0],data_PCA[i*100:(i+1)*100,1],c=color[i],label=label[i],alpha=0.3, edgecolors='none')
+    ax[1].scatter(data_TSNE[i*100:(i+1)*100,0],data_TSNE[i*100:(i+1)*100,1],c=color[i],label=label[i],alpha=0.3, edgecolors='none')
+
